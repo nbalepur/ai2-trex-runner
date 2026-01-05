@@ -793,6 +793,11 @@
                 e.preventDefault();
             }
 
+            // Prevent page scrolling for game control keys (up arrow, space, down arrow)
+            if (Runner.keycodes.JUMP[e.keyCode] || Runner.keycodes.DUCK[e.keyCode]) {
+                e.preventDefault();
+            }
+
             if (e.target != this.detailsButton) {
                 if (!this.crashed && (Runner.keycodes.JUMP[e.keyCode] ||
                     e.type == Runner.events.TOUCHSTART)) {
