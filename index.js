@@ -231,7 +231,7 @@
      * @enum {string}
      */
     Runner.events = {
-        ANIM_END: 'webkitAnimationEnd',
+        ANIM_END: 'animationend',
         CLICK: 'click',
         KEYDOWN: 'keydown',
         KEYUP: 'keyup',
@@ -540,6 +540,10 @@
 
             this.dimensions.WIDTH = this.outerContainerEl.offsetWidth - padding * 2;
             this.dimensions.WIDTH = Math.min(DEFAULT_WIDTH, this.dimensions.WIDTH); //Arcade Mode
+            // An iframe can initially be measured before its parent layout has
+            // settled. Recalculate from the configured base speed whenever the
+            // final width arrives so a tiny first measurement is not retained.
+            this.setSpeed(this.config.SPEED);
             if (this.activated) {
                 this.setArcadeModeContainerScale();
             }
@@ -584,7 +588,7 @@
                 this.tRex.playingIntro = true;
 
                 // CSS animation definition.
-                var keyframes = '@-webkit-keyframes intro { ' +
+                var keyframes = '@keyframes intro { ' +
                     'from { width:' + Trex.config.WIDTH + 'px }' +
                     'to { width: ' + this.dimensions.WIDTH + 'px }' +
                     '}';
@@ -598,7 +602,7 @@
                 this.containerEl.addEventListener(Runner.events.ANIM_END,
                     this.startGame.bind(this));
 
-                this.containerEl.style.webkitAnimation = 'intro .4s ease-out 1 both';
+                this.containerEl.style.animation = 'intro .4s ease-out 1 both';
                 this.containerEl.style.width = this.dimensions.WIDTH + 'px';
 
                 // if (this.touchController) {
@@ -620,7 +624,7 @@
             this.runningTime = 0;
             this.playingIntro = false;
             this.tRex.playingIntro = false;
-            this.containerEl.style.webkitAnimation = '';
+            this.containerEl.style.animation = '';
             this.playCount++;
 
             // Handle tabbing off the page. Pause the current game.
